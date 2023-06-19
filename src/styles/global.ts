@@ -22,4 +22,9 @@ export const GlobalStyle = createGlobalStyle`
     body,input-security,textarea,button{
          font:400 1rem Roboto,sans-serif;
     }
+
+    @media screen and (max-width:760px) {
+        *{}
+        
+    }
 `;
