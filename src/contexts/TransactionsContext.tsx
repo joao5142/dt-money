@@ -1,12 +1,13 @@
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { createContext } from "use-context-selector";
-import { api } from "../lib/axios";
+
 import { ITransaction } from "../types/transactions-types";
 
 import { v4 as uuidv4 } from "uuid";
 
 import { addNewTransaction } from "../storage/transactions/addNewTransaction";
 import { getAllTransactions } from "../storage/transactions/getAllTransactions";
+
 import { deleteTransaction as deleteStorageTransaction } from "../storage/transactions/deleteTransaction";
 import { updateTransaction as updateTransactionStorage } from "../storage/transactions/updateTransaction";
 
