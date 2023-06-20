@@ -15,15 +15,18 @@ import {
 
 import { TransactionsContext } from "../../contexts/TransactionsContext";
 
+import { ITransaction } from "../../types/transactions-types";
+
 import { priceFormatter } from "../../utils/formater";
 
 import { useContextSelector } from "use-context-selector";
 import { Dropdown } from "./components/Dropdown/index";
 import { Alert } from "./components/Alert";
-import { useState } from "react";
-import { ITransaction } from "../../types/transactions-types";
 import { TransactionModal } from "../../components/TransactionModal";
+
 import * as Dialog from "@radix-ui/react-dialog";
+
+import { useState } from "react";
 
 export function Transactions() {
 	const [isAlertDeleteOpen, setIsAlertDeleteOpen] = useState(false);
@@ -91,7 +94,9 @@ export function Transactions() {
 								})}
 							</tbody>
 						) : (
-							<NoDataText>Insira alguma transação</NoDataText>
+							<>
+								<NoDataText>Não foi encontrada nenhuma transação.</NoDataText>
+							</>
 						)}
 					</TransactionsTable>
 				</TransactionsTableContainer>
