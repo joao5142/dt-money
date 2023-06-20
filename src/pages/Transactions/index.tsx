@@ -18,15 +18,34 @@ import { priceFormatter } from "../../utils/formater";
 
 import { useContextSelector } from "use-context-selector";
 import { Dropdown } from "./components/Dropdown/index";
+import { Alert } from "./components/Alert";
+import { useState } from "react";
 
 export function Transactions() {
+  const [isAlertDeleteOpen, setIsAlertDeleteOpen] = useState(false);
+  const [transactionId, setTransactionId] = useState("");
+
   const transactions = useContextSelector(TransactionsContext, (context) => {
     return context.transactions;
   });
+  const deleteTransaction = useContextSelector(
+    TransactionsContext,
+    (context) => {
+      return context.deleteTransaction;
+    }
+  );
 
-  function handleDeleteItem(id: string) {}
+  function handleOpenDeleteAlert() {
+    setIsAlertDeleteOpen(true);
+  }
 
-  function handleEditItem(id: string) {}
+  function handleDeleteItem() {
+    deleteTransaction(transactionId);
+  }
+
+  function handleEditItem() {
+    console.log("edit", transactionId);
+  }
 
   return (
     <div>
@@ -58,8 +77,14 @@ export function Transactions() {
                     </td>
                     <td>
                       <Dropdown
-                        onDelete={() => handleDeleteItem(transaction.id)}
-                        onEdit={() => handleEditItem(transaction.id)}
+                        onDelete={() => {
+                          setTransactionId(transaction.id);
+                          handleOpenDeleteAlert();
+                        }}
+                        onEdit={() => {
+                          setTransactionId(transaction.id);
+                          handleEditItem();
+                        }}
                       />
                     </td>
                   </tr>
@@ -69,6 +94,14 @@ export function Transactions() {
           </TransactionsTable>
         </TransactionsTableContainer>
       </TransactionsContainer>
+      <Alert
+        open={isAlertDeleteOpen}
+        onCloseAlert={() => setIsAlertDeleteOpen(false)}
+        onProceed={() => {
+          setIsAlertDeleteOpen(false);
+          handleDeleteItem();
+        }}
+      />
     </div>
   );
 }

@@ -7,11 +7,13 @@ import { v4 as uuidv4 } from "uuid";
 
 import { addNewTransaction } from "../storage/transactions/addNewTransaction";
 import { getAllTransactions } from "../storage/transactions/getAllTransactions";
+import { deleteTransaction as deleteStorageTransaction } from "../storage/transactions/deleteTransaction";
 
 interface TransactionContextType {
   transactions: ITransaction[];
   fetchTransactions: (query?: string) => Promise<void>;
   createTransaction: (data: CreateTransactionInput) => Promise<void>;
+  deleteTransaction: (id: string) => void;
 }
 
 interface TransactionsProviderProps {
@@ -30,8 +32,8 @@ export const TransactionsContext = createContext({} as TransactionContextType);
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
 
-  const fetchTransactions = useCallback(async () => {
-    const transactions = getAllTransactions();
+  const fetchTransactions = useCallback((query?: string) => {
+    const transactions = getAllTransactions(query);
     setTransactions(transactions);
   }, []);
 
@@ -55,13 +57,27 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     []
   );
 
+  const deleteTransaction = useCallback((id: string) => {
+    try {
+      deleteStorageTransaction(id);
+      fetchTransactions();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   useEffect(() => {
     fetchTransactions();
   }, [fetchTransactions]);
 
   return (
     <TransactionsContext.Provider
-      value={{ transactions, createTransaction, fetchTransactions }}
+      value={{
+        transactions,
+        createTransaction,
+        fetchTransactions,
+        deleteTransaction,
+      }}
     >
       {children}
     </TransactionsContext.Provider>

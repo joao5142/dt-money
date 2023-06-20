@@ -1,31 +1,47 @@
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import {
+  AlertContainer,
+  AlertContent,
+  AlertOverlay,
+  AlertPortal,
+  ButtonsContainer,
+  CancelButton,
+  ProceedButton,
+} from "./styles";
+import { ReactNode } from "react";
 
-export function Alert() {
+interface AlertProps {
+  open: boolean;
+  onCloseAlert: () => void;
+  onProceed: () => void;
+}
+export function Alert({ open, onCloseAlert, onProceed }: AlertProps) {
   return (
-    <AlertDialog.Root>
-      <AlertDialog.Trigger asChild>
-        <button className="Button violet">Delete account</button>
-      </AlertDialog.Trigger>
-      <AlertDialog.Portal>
-        <AlertDialog.Overlay className="AlertDialogOverlay" />
-        <AlertDialog.Content className="AlertDialogContent">
-          <AlertDialog.Title className="AlertDialogTitle">
-            Are you absolutely sure?
-          </AlertDialog.Title>
-          <AlertDialog.Description className="AlertDialogDescription">
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialog.Description>
-          <div style={{ display: "flex", gap: 25, justifyContent: "flex-end" }}>
-            <AlertDialog.Cancel asChild>
-              <button className="Button mauve">Cancel</button>
-            </AlertDialog.Cancel>
-            <AlertDialog.Action asChild>
-              <button className="Button red">Yes, delete account</button>
-            </AlertDialog.Action>
+    <AlertContainer
+      open={open}
+      onOpenChange={(value) => console.log("mudou", value)}
+    >
+      <AlertPortal>
+        <AlertOverlay />
+        <AlertContent>
+          <div>
+            <AlertDialog.Title>
+              Tem certeza que deseja prosseguir?
+            </AlertDialog.Title>
+            <AlertDialog.Description>
+              Essa ação pode ser irreversivel.
+            </AlertDialog.Description>
+            <ButtonsContainer>
+              <AlertDialog.Cancel asChild>
+                <CancelButton onClick={onCloseAlert}>Cancelar</CancelButton>
+              </AlertDialog.Cancel>
+              <AlertDialog.Action asChild>
+                <ProceedButton onClick={onProceed}>Sim</ProceedButton>
+              </AlertDialog.Action>
+            </ButtonsContainer>
           </div>
-        </AlertDialog.Content>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+        </AlertContent>
+      </AlertPortal>
+    </AlertContainer>
   );
 }
